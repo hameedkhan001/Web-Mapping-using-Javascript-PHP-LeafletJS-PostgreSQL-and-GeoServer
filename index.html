@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Display</title>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css">
+
+    <style>
+        #map {
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+<form id="search-form">
+    <input type="text" id="search-input" placeholder="Enter a location">
+    <button type="submit">Search</button>
+</form>
+<div id="map"></div>
+
+<!-- Include Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
+<script>
+    var map = L.map("map").setView([28.42540031847117, 70.29919507593738], 6.5);
+    map.zoomControl.setPosition("topright");
+
+    // Add tilelayer from cloud.maptiler.com
+    var streetsLayer = L.tileLayer(
+        "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ooDUN2Chbc9sjETaqkcs",
+        {
+            maxZoom: 18,
+            attribution:
+                "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ooDUN2Chbc9sjETaqkcs",
+        }
+    );
+
+    var satelliteLayer = L.tileLayer(
+        'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }
+    );
+
+    streetsLayer.addTo(map); // Default layer
+
+    var baseMaps = {
+        'Streets': streetsLayer,
+        'Satellite': satelliteLayer,
+    };
+
+    // Your existing overlay layers...
+    var District = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:Districts",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    );
+    //Tehsil//
+    var Tehsils = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:Tehsils",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+    //pu//
+    var pu = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:PUs Boundaries",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+    //vehrai ginner//
+
+    var Ginners = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:Ginners",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+    //LGs//
+
+    var LGs = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:LGs",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+
+
+    //ryk mask//
+
+    var ryk = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:ryk_mask",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+    
+
+    //vehari mask//
+
+    var vehari = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:vehari_mask",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+
+    //dadu//
+
+    var dadu = L.tileLayer.wms(
+        "http://opvs.propsure.rocks:8080/geoserver/bci/wms",
+        {
+            layers: "bci:dadu_mask",
+            version: "1.1.1",
+            transparent: true,
+            format: "image/png",
+        }
+    )
+
+    var overlayLayers = {
+        'District': District,
+        'Tehsils': Tehsils,
+        'pu': pu,
+        'Ginners': Ginners,
+        'LGs': LGs,
+        'ryk': ryk,
+        'vehari': vehari,
+        'dadu': dadu,
+    };
+
+    L.control.layers(baseMaps, overlayLayers).addTo(map);
+
+    // Rest of your script...
+</script>
+<script src="script.js"></script>
+</body>
+</html>
